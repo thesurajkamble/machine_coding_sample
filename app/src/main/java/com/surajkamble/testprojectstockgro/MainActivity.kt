@@ -1,6 +1,5 @@
 package com.surajkamble.testprojectstockgro
 
-import SearchViewModel
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,12 +28,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.surajkamble.testprojectstockgro.data.repository.SearchRepositoryImpl
+import com.surajkamble.testprojectstockgro.domain.SearchUseCase
+import com.surajkamble.testprojectstockgro.presentation.SearchViewModel
 import com.surajkamble.testprojectstockgro.ui.theme.TestProjectStockgroTheme
 
 class MainActivity : ComponentActivity() {
-    var searchViewModel: SearchViewModel = ViewmodelProvider(
-        this
-    ).get(SearchViewModel::class.java)
+
+    private val searchViewModel: SearchViewModel by viewModels {
+        val repository = SearchRepositoryImpl()
+        val useCase = SearchUseCase(repository)
+        SearchViewModel.provideFactory(useCase)
+    }
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {

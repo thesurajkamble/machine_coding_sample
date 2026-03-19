@@ -1,5 +1,9 @@
+package com.surajkamble.testprojectstockgro.presentation
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.surajkamble.testprojectstockgro.domain.SearchUseCase
 import com.surajkamble.testprojectstockgro.presentation.util.SearchUiState
 import kotlinx.coroutines.Job
@@ -41,5 +45,14 @@ class SearchViewModel(private val searchUseCase: SearchUseCase) : ViewModel() {
     fun onCancelClicked() {
         searchJob?.cancel()
         _uiState.update { it.copy(isLoading = false) }
+    }
+
+    companion object {
+        fun provideFactory(searchUseCase: SearchUseCase): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                return SearchViewModel(searchUseCase) as T
+            }
+        }
     }
 }
